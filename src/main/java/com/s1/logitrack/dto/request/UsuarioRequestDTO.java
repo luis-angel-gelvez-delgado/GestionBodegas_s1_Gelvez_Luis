@@ -1,6 +1,6 @@
 package com.s1.logitrack.dto.request;
 
-import com.s1.logitrack.model.TipoRol;
+import com.s1.logitrack.enums.TipoRol;
 import jakarta.validation.constraints.*;
 
 public record UsuarioRequestDTO(

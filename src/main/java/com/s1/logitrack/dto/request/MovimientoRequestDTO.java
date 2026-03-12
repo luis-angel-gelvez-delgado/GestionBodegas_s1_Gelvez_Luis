@@ -1,6 +1,6 @@
 package com.s1.logitrack.dto.request;
 
-import com.s1.logitrack.model.TipoMovimiento;
+import com.s1.logitrack.enums.TipoMovimiento;
 import jakarta.validation.constraints.*;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.s1.logitrack.repository;
 
 import com.s1.logitrack.model.MovimientoInventario;
-import com.s1.logitrack.model.TipoMovimiento;
+import com.s1.logitrack.enums.TipoMovimiento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.s1.logitrack.dto.response;
 
-import com.s1.logitrack.model.TipoRol;
+import com.s1.logitrack.enums.TipoRol;
 
 public record UsuarioResponseDTO(
         Long id,

@@ -1,6 +1,6 @@
 package com.s1.logitrack.repository;
 
-import com.s1.logitrack.model.TipoRol;
+import com.s1.logitrack.enums.TipoRol;
 import com.s1.logitrack.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

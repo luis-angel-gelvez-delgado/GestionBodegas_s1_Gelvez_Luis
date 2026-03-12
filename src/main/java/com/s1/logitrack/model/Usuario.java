@@ -1,5 +1,6 @@
 package com.s1.logitrack.model;
 
+import com.s1.logitrack.enums.TipoRol;
 import jakarta.persistence.*;
 import lombok.*;
 

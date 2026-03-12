@@ -1,6 +1,6 @@
 package com.s1.logitrack.dto.response;
 
-import com.s1.logitrack.model.TipoMovimiento;
+import com.s1.logitrack.enums.TipoMovimiento;
 import java.time.LocalDateTime;
 import java.util.List;
 
