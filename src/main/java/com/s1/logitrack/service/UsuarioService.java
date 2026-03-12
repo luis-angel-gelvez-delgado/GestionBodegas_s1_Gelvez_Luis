@@ -9,7 +9,7 @@ import java.util.List;
 public interface UsuarioService {
 
     UsuarioResponseDTO guardar(UsuarioRequestDTO dto);
-    UsuarioRequestDTO actualizar(UsuarioRequestDTO dto);
+    UsuarioResponseDTO actualizar(UsuarioRequestDTO dto, Long id);
     List<UsuarioResponseDTO> listarTodos();
     UsuarioResponseDTO buscarPorId(Long id);
     void eliminar(Long id);
