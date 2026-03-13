@@ -1,5 +1,6 @@
 package com.s1.logitrack.model;
 
+import com.s1.logitrack.config.AuditoriaListener;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -8,6 +9,8 @@ import java.math.BigDecimal;
 @Table(name = "producto")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@ToString
+@EntityListeners(AuditoriaListener.class)
 public class Producto {
 
     @Id

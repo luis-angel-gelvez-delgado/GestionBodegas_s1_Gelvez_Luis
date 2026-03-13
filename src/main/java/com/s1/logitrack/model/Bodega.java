@@ -1,5 +1,6 @@
 package com.s1.logitrack.model;
 
+import com.s1.logitrack.config.AuditoriaListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,6 +8,8 @@ import lombok.*;
 @Table(name = "bodega")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@ToString
+@EntityListeners(AuditoriaListener.class)
 public class Bodega {
 
     @Id

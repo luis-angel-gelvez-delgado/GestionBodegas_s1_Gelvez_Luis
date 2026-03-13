@@ -1,5 +1,6 @@
 package com.s1.logitrack.model;
 
+import com.s1.logitrack.config.AuditoriaListener;
 import com.s1.logitrack.enums.TipoRol;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,6 +9,8 @@ import lombok.*;
 @Table(name = "usuario")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@ToString
+@EntityListeners(AuditoriaListener.class)
 public class Usuario {
 
     @Id

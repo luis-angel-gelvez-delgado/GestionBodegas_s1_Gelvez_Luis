@@ -1,5 +1,6 @@
 package com.s1.logitrack.model;
 
+import com.s1.logitrack.config.AuditoriaListener;
 import com.s1.logitrack.enums.TipoMovimiento;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,8 @@ import java.util.List;
 @Table(name = "movimiento_inventario")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@ToString(exclude = "detalles")
+@EntityListeners(AuditoriaListener.class)
 public class MovimientoInventario {
 
     @Id
