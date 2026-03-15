@@ -26,6 +26,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     private final BodegaRepository bodegaRepository;
     private final ProductoRepository productoRepository;
     private final DetalleMovimientoRepository detalleMovimientoRepository;
+    private final ProductoBodegaRepository productoBodegaRepository;
 
     @Override
     public MovimientoResponseDTO registrar(MovimientoRequestDTO dto) {
@@ -40,45 +41,45 @@ public class MovimientoServiceImpl implements MovimientoService {
         movimiento.setTipo(dto.tipo());
         movimiento.setUsuario(usuario);
 
-        // 3. Validar y asignar bodegas segun el tipo de movimiento
+        // 3. Validar y asignar bodegas segun tipo
+        Bodega bodegaOrigen = null;
+        Bodega bodegaDestino = null;
+
         if (dto.tipo() == TipoMovimiento.ENTRADA) {
-            // ENTRADA: solo necesita bodega destino
             if (dto.bodegaDestinoId() == null) {
                 throw new BusinessRuleException("Una ENTRADA requiere bodega destino");
             }
-            Bodega destino = bodegaRepository.findById(dto.bodegaDestinoId())
+            bodegaDestino = bodegaRepository.findById(dto.bodegaDestinoId())
                     .orElseThrow(() -> new BusinessRuleException("No existe la bodega destino con id: " + dto.bodegaDestinoId()));
-            movimiento.setBodegaDestino(destino);
+            movimiento.setBodegaDestino(bodegaDestino);
 
         } else if (dto.tipo() == TipoMovimiento.SALIDA) {
-            // SALIDA: solo necesita bodega origen
             if (dto.bodegaOrigenId() == null) {
                 throw new BusinessRuleException("Una SALIDA requiere bodega origen");
             }
-            Bodega origen = bodegaRepository.findById(dto.bodegaOrigenId())
+            bodegaOrigen = bodegaRepository.findById(dto.bodegaOrigenId())
                     .orElseThrow(() -> new BusinessRuleException("No existe la bodega origen con id: " + dto.bodegaOrigenId()));
-            movimiento.setBodegaOrigen(origen);
+            movimiento.setBodegaOrigen(bodegaOrigen);
 
         } else if (dto.tipo() == TipoMovimiento.TRANSFERENCIA) {
-            // TRANSFERENCIA: necesita ambas bodegas
             if (dto.bodegaOrigenId() == null || dto.bodegaDestinoId() == null) {
                 throw new BusinessRuleException("Una TRANSFERENCIA requiere bodega origen y destino");
             }
             if (dto.bodegaOrigenId().equals(dto.bodegaDestinoId())) {
                 throw new BusinessRuleException("La bodega origen y destino no pueden ser la misma");
             }
-            Bodega origen = bodegaRepository.findById(dto.bodegaOrigenId())
+            bodegaOrigen = bodegaRepository.findById(dto.bodegaOrigenId())
                     .orElseThrow(() -> new BusinessRuleException("No existe la bodega origen con id: " + dto.bodegaOrigenId()));
-            Bodega destino = bodegaRepository.findById(dto.bodegaDestinoId())
+            bodegaDestino = bodegaRepository.findById(dto.bodegaDestinoId())
                     .orElseThrow(() -> new BusinessRuleException("No existe la bodega destino con id: " + dto.bodegaDestinoId()));
-            movimiento.setBodegaOrigen(origen);
-            movimiento.setBodegaDestino(destino);
+            movimiento.setBodegaOrigen(bodegaOrigen);
+            movimiento.setBodegaDestino(bodegaDestino);
         }
 
-        // 4. Guardar el movimiento para obtener su id
+        // 4. Guardar el movimiento
         MovimientoInventario movimientoGuardado = movimientoRepository.save(movimiento);
 
-        // 5. Procesar los detalles (productos y cantidades)
+        // 5. Procesar detalles con stock por bodega
         List<DetalleMovimiento> detalles = new ArrayList<>();
 
         for (DetalleMovimientoRequestDTO detalleDTO : dto.detalles()) {
@@ -86,22 +87,53 @@ public class MovimientoServiceImpl implements MovimientoService {
             Producto producto = productoRepository.findById(detalleDTO.productoId())
                     .orElseThrow(() -> new BusinessRuleException("No existe el producto con id: " + detalleDTO.productoId()));
 
-            // Validar stock disponible en SALIDA y TRANSFERENCIA
+            // SALIDA → restar stock en bodega origen
             if (dto.tipo() == TipoMovimiento.SALIDA || dto.tipo() == TipoMovimiento.TRANSFERENCIA) {
-                if (producto.getStock() < detalleDTO.cantidad()) {
-                    throw new BusinessRuleException("Stock insuficiente para el producto: " + producto.getNombre()
-                            + ". Stock disponible: " + producto.getStock());
+
+                ProductoBodega stockOrigen = productoBodegaRepository
+                        .findByProductoIdAndBodegaId(producto.getId(), bodegaOrigen.getId())
+                        .orElseThrow(() -> new BusinessRuleException(
+                                "El producto " + producto.getNombre() + " no existe en la bodega origen"));
+
+                if (stockOrigen.getStock() < detalleDTO.cantidad()) {
+                    throw new BusinessRuleException(
+                            "Stock insuficiente para " + producto.getNombre() +
+                                    " en bodega origen. Stock disponible: " + stockOrigen.getStock());
                 }
-                // Reducir stock
+
+                stockOrigen.setStock(stockOrigen.getStock() - detalleDTO.cantidad());
+                productoBodegaRepository.save(stockOrigen);
+
+                // Actualizar stock global del producto
                 producto.setStock(producto.getStock() - detalleDTO.cantidad());
             }
 
-            // Aumentar stock en ENTRADA y TRANSFERENCIA
+            // ENTRADA → sumar stock en bodega destino
             if (dto.tipo() == TipoMovimiento.ENTRADA || dto.tipo() == TipoMovimiento.TRANSFERENCIA) {
+
+                // Buscar si ya existe el producto en esa bodega
+                ProductoBodega stockDestino = productoBodegaRepository
+                        .findByProductoIdAndBodegaId(producto.getId(), bodegaDestino.getId())
+                        .orElse(null);
+
+
+                if (stockDestino == null) {
+                    // Si no existe, crear el registro
+                    stockDestino = new ProductoBodega();
+                    stockDestino.setProducto(producto);
+                    stockDestino.setBodega(bodegaDestino);
+                    stockDestino.setStock(0);
+                }
+
+                stockDestino.setStock(stockDestino.getStock() + detalleDTO.cantidad());
+                productoBodegaRepository.save(stockDestino);
+
+
+                // Actualizar stock global del producto
                 producto.setStock(producto.getStock() + detalleDTO.cantidad());
             }
 
-            // Guardar producto con stock actualizado
+            // Guardar producto con stock global actualizado
             productoRepository.save(producto);
 
             // Crear detalle

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,30 +16,34 @@ public class ReporteServiceImpl implements ReporteService {
     private final BodegaRepository bodegaRepository;
     private final ProductoRepository productoRepository;
     private final DetalleMovimientoRepository detalleMovimientoRepository;
+    private final ProductoBodegaRepository productoBodegaRepository;
 
     @Override
     public ReporteResumenDTO generarResumen() {
 
-        // 1. Stock por bodega
+        // 1. Stock real por bodega usando ProductoBodega
         List<Bodega> bodegas = bodegaRepository.findAll();
-        List<Producto> productos = productoRepository.findAll();
 
-        // Calculamos el total de productos y stock general
-        // (en este modelo el stock es global por producto, no por bodega)
         List<StockPorBodegaDTO> stockPorBodega = bodegas.stream()
-                .map(b -> new StockPorBodegaDTO(
-                        b.getId(),
-                        b.getNombre(),
-                        b.getUbicacion(),
-                        productos.size(),
-                        productos.stream()
-                                .mapToInt(Producto::getStock)
-                                .sum()
-                ))
+                .map(b -> {
+                    List<ProductoBodega> stocksEnBodega = productoBodegaRepository.findByBodegaId(b.getId());
+
+                    Integer totalProductos = stocksEnBodega.size();
+                    Integer totalStock = stocksEnBodega.stream()
+                            .mapToInt(ProductoBodega::getStock)
+                            .sum();
+
+                    return new StockPorBodegaDTO(
+                            b.getId(),
+                            b.getNombre(),
+                            b.getUbicacion(),
+                            totalProductos,
+                            totalStock
+                    );
+                })
                 .toList();
 
         // 2. Productos mas movidos
-        // Agrupamos los detalles por producto y sumamos cantidades
         List<DetalleMovimiento> detalles = detalleMovimientoRepository.findAll();
 
         Map<Producto, Integer> movimientosPorProducto = new HashMap<>();
