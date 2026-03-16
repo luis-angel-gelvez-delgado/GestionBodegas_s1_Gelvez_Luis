@@ -18,7 +18,6 @@ public class OpenApiConfig {
                         .title("API LogiTrack")
                         .version("1.0")
                         .description("Sistema de gestión y auditoría de bodegas - LogiTrack S.A."))
-                // Agrega el boton Authorize en Swagger
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Auth"))
                 .components(new Components()
                         .addSecuritySchemes("Bearer Auth",

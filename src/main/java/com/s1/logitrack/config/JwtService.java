@@ -13,13 +13,12 @@ import java.util.Map;
 public class JwtService {
 
     private final String SECRET = "clave_super_secreta_logitrack_2026";
-    private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 horas
+    private final long EXPIRATION = 1000 * 60 * 60 * 24 * 5; // 24 horas
 
     private Key getKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    // Generar token con claims extras (como el rol)
     public String generateToken(String username, Map<String, Object> extraClaims) {
         return Jwts.builder()
                 .setClaims(extraClaims)
@@ -43,7 +42,6 @@ public class JwtService {
         }
     }
 
-    // Obtener el rol del token
     public String getRolFromToken(String token) {
         try {
             return Jwts.parserBuilder()

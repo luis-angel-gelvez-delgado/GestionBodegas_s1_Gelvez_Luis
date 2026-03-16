@@ -9,7 +9,7 @@ import lombok.*;
 @Table(name = "usuario")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-@ToString
+@ToString(exclude = "password")
 @EntityListeners(AuditoriaListener.class)
 public class Usuario {
 
