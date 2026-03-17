@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiTrack - Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>LogiTrack</h2>
+            <ul>
+                <li onclick="mostrarSeccion('bodegas')">Bodegas</li>
+                <li onclick="mostrarSeccion('productos')">Productos</li>
+                <li onclick="mostrarSeccion('movimientos')">Movimientos</li>
+                <li onclick="mostrarSeccion('reporte')">Reporte</li>
+                <li onclick="mostrarSeccion('auditorias')">Auditorias</li>
+            </ul>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesion</button>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="content">
+
+            <!-- BODEGAS -->
+            <div id="seccion-bodegas" class="seccion">
+                <h2>Bodegas</h2>
+                <button onclick="cargarBodegas()">Actualizar</button>
+                <div id="lista-bodegas"></div>
+            </div>
+
+            <!-- PRODUCTOS -->
+            <div id="seccion-productos" class="seccion" style="display:none">
+                <h2>Productos</h2>
+                <button onclick="cargarProductos()">Actualizar</button>
+                <div id="lista-productos"></div>
+            </div>
+
+            <!-- MOVIMIENTOS -->
+            <div id="seccion-movimientos" class="seccion" style="display:none">
+                <h2>Movimientos</h2>
+                <button onclick="cargarMovimientos()">Actualizar</button>
+                <div id="lista-movimientos"></div>
+            </div>
+
+            <!-- REPORTE -->
+            <div id="seccion-reporte" class="seccion" style="display:none">
+                <h2>Reporte General</h2>
+                <button onclick="cargarReporte()">Actualizar</button>
+                <div id="reporte-stock"></div>
+                <div id="reporte-movidos"></div>
+            </div>
+
+            <!-- AUDITORIAS -->
+            <div id="seccion-auditorias" class="seccion" style="display:none">
+                <h2>Auditorias</h2>
+                <button onclick="cargarAuditorias()">Actualizar</button>
+                <div id="lista-auditorias"></div>
+            </div>
+
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

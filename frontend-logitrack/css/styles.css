@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f0f2f5;
+}
+
+/* LOGIN */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
+.login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 380px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.login-box h1 {
+    font-size: 2rem;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+}
+
+.login-box p {
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #444;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+button:hover {
+    background: #16213e;
+}
+
+.error {
+    color: red;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+/* DASHBOARD */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background: #1a1a2e;
+    color: white;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    margin-bottom: 32px;
+    font-size: 1.2rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    flex: 1;
+}
+
+.sidebar ul li {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background 0.2s;
+}
+
+.sidebar ul li:hover {
+    background: #16213e;
+}
+
+.btn-logout {
+    background: #e74c3c;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+
+.content {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+}
+
+.seccion h2 {
+    margin-bottom: 16px;
+    color: #1a1a2e;
+}
+
+/* TARJETAS */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    color: #1a1a2e;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* FORMULARIOS */
+.form-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.form-card h3 {
+    width: 100%;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+}
+
+.form-card input,
+.form-card select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.form-card button {
+    width: auto;
+    padding: 8px 20px;
+    background: #1a1a2e;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn-edit {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: auto;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: auto;
+}
+
+.btn-cancel {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: auto;
+}
+
+.badge-entrada  { background: #d4edda; color: #155724; }
+.badge-salida   { background: #f8d7da; color: #721c24; }
+.badge-transfer { background: #fff3cd; color: #856404; }
